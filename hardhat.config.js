@@ -5,7 +5,10 @@ require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.28",
+  solidity: {
+    version: "0.8.4",
+  },
+
   resolc: {
     compilerSource: "npm",
   },
@@ -28,6 +31,12 @@ module.exports = {
       polkavm: true,
       url: 'http://34.56.133.26:8545',
       accounts: [process.env.PRIVATE_KEY],
+      enableTransientStorage: true,
+      allowUnlimitedContractSize: true,
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
     },
   },
 };
