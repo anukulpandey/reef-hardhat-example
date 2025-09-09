@@ -1,6 +1,6 @@
-# ERC-20 Token Implementation on PolkaVM
+# Reef Hardhat Example
 
-This project demonstrates how to deploy a standard ERC-20 token contract to PolkaVM using Hardhat.
+This project demonstrates how to deploy a standard ERC-20 token contract to Reef Chain using Hardhat.
 
 ## Contract Overview
 
