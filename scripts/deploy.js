@@ -18,11 +18,10 @@ async function deploy() {
   console.log("Deploying SqwidMarketplace...");
   const SqwidMarketplace = await ethers.getContractFactory("SqwidMarketplace");
   const marketFee = 250; // 2.5%
-  const sqwidMarketplaceInstance = await SqwidMarketplace.getDeployTransaction(marketFee, sqwidERC1155Address);
-  console.log("sqwidMarketplaceInstance===",sqwidMarketplaceInstance)
-  // await sqwidMarketplaceInstance.waitForDeployment();
-  // const sqwidMarketplaceAddress = await sqwidMarketplaceInstance.getAddress();
-  // console.log(`SqwidMarketplace deployed in ${sqwidMarketplaceAddress}`);
+  const sqwidMarketplaceInstance = await SqwidMarketplace.deploy(marketFee, sqwidERC1155Address);
+  await sqwidMarketplaceInstance.waitForDeployment();
+  const sqwidMarketplaceAddress = await sqwidMarketplaceInstance.getAddress();
+  console.log(`SqwidMarketplace deployed in ${sqwidMarketplaceAddress}`);
 
   // Deploy SqwidMarketplaceUtil
   console.log("Deploying SqwidMarketplaceUtil...");
