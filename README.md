@@ -1,56 +1,43 @@
-# Reef Hardhat Example
+# Sqwid Marketplace Core
 
-This project demonstrates how to deploy a standard ERC-20 token contract to Reef Chain using Hardhat.
+This project has been created using the [Hardhat-reef-template](https://github.com/anukulpandey/reef-hardhat-example).
 
-## Contract Overview
-
-The ERC-20 contract in this project implements the standard ERC-20 interface:
-- Token name and symbol
-- Decimals
-- Total supply management
-- Transfer functionality
-- Approval and allowance management
-
-## Prerequisites
-
-- Node.js (v14+)
-- NPM or Yarn
-- Basic understanding of Hardhat and Solidity
-
-## Setup Instructions
-
-### 1. Install Dependencies
-
-First, install the project dependencies:
+## Installing
 
 ```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
+## Compile contracts
 
-Create a `.env` file in the root directory:
-
-```
-PRIVATE_KEY=your_private_key_here
+```bash
+npx hardhat compile
 ```
 
-⚠️ **SECURITY WARNING**: 
-- Never commit your `.env` file to version control
-- Keep your private key secure and don't share it with anyone
-- Consider using a dedicated test account with minimal funds for deployments
-- For production deployments, consider using a hardware wallet or more secure key management solutions
+## Deploy contracts
 
-### 3. Configure Binary Paths
+Deploy on Reef:
 
-In the `hardhat.config.js` file, replace the following placeholders:
-
-```javascript
-adapterBinaryPath: 'INSERT_PATH_TO_ETH_RPC_ADAPTER',
+```bash
+npx hardhat run scripts/deploy.js --network reef
 ```
 
-To set up the `INSERT_PATH_TO_ETH_RPC_ADAPTER` variables and run a local node for development and testing, follow the instructions on the [Deploying with a Local Node](https://papermoonio.github.io/polkadot-mkdocs/develop/smart-contracts/dev-environments/hardhat/#deploying-with-a-local-node) page.
+## Run tests
 
-## Additional Resources
+```bash
+npx hardhat test --network reef
+```
 
-For a comprehensive guide on deploying contracts to PolkaVM using Hardhat, visit the [Hardhat Development Environment](https://papermoonio.github.io/polkadot-mkdocs/develop/smart-contracts/dev-environments/hardhat/) page in the official Polkadot documentation.
+To reuse a contract already deployed, set its address in the _hardhat.config.js_ file, in the _contracts_ section. If no address is specified, a new contract will be deployed.
+
+## Use account seeds
+
+In order to use your Reef account to deploy the contracts or run the tests, you have to rename the _seeds.example.json_ file to _seeds.json_ and set your seed words there.
+
+## Diagram
+
+![diagram](sqwid-diagram-v02.png)
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.

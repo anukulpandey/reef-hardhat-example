@@ -5,7 +5,11 @@ require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.28",
+  solidity: {
+    version: "0.8.4",
+    
+  },
+
   resolc: {
     compilerSource: "npm",
   },
@@ -24,10 +28,16 @@ module.exports = {
       polkavm: true,
       url: `http://127.0.0.1:8545`,
     },
+    westend: {
+      polkavm: true,
+      url: 'https://westend-asset-hub-eth-rpc.polkadot.io',
+      accounts: [process.env.PRIVATE_KEY],
+    },
     reef: {
       polkavm: true,
-      url: 'http://34.56.133.26:8545',
+      url: "http://34.56.133.26:8545",
       accounts: [process.env.PRIVATE_KEY],
+      chainId:13939
     },
   },
 };
