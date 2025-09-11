@@ -60,7 +60,7 @@ async function deploy() {
   // Deploy SqwidMarketplace
   console.log("Deploying SqwidMarketplace...");
   const SqwidMarketplace = await ethers.getContractFactory("SqwidMarketplace");
-  const SqwidMarketplaceInstance = await SqwidMarketplace.deploy(SqwidMarketplaceSaleModuleAddress,SqwidMarketplaceRaffleModuleInstance,SqwidMarketplaceAuctionModuleInstance,SqwidMarketplaceLoanModuleInstance);
+  const SqwidMarketplaceInstance = await SqwidMarketplace.deploy(SqwidMarketplaceSaleModuleAddress,SqwidMarketplaceRaffleModuleInstance,SqwidMarketplaceAuctionModuleInstance,SqwidMarketplaceLoanModuleInstance,SqwidMarketplaceBaseAddress);
   await SqwidMarketplaceInstance.waitForDeployment();
   const SqwidMarketplaceInstanceAddress = await SqwidMarketplaceInstance.getAddress();
   console.log(`SqwidMarketplace deployed in ${SqwidMarketplaceInstanceAddress}`);

@@ -50,7 +50,7 @@ contract SqwidMarketplaceAuctionModule is ReentrancyGuard,MarketplaceModifiers,M
         auction.totalAddresses = 0;
 
         // Register available position in base
-        base._updateAvailablePosition(itemId, sender);
+        base.updateAvailablePosition(itemId, sender);
 
         emit PositionUpdate(positionId, itemId, sender, amount, 0, base.getMarketFee(PositionState.Auction), PositionState.Auction);
     }
@@ -99,14 +99,14 @@ contract SqwidMarketplaceAuctionModule is ReentrancyGuard,MarketplaceModifiers,M
 
 
             // Update available position
-            base._updateAvailablePosition(itemId, receiver);
+            base.updateAvailablePosition(itemId, receiver);
 
             // Refund other bidders
             for (uint256 i; i < auction.totalAddresses; i++) {
                 address addr = auction.indexToAddress[i];
                 uint256 bidAmount = auction.addressToAmount[addr];
                 if (addr != receiver) {
-                    base._updateBalance(addr, bidAmount);
+                    base.updateBalance(addr, bidAmount);
                 }
             }
 

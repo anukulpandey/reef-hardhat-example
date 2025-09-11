@@ -111,7 +111,7 @@ contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,Mark
 
         // Allocate market fee into owner balance
         uint256 marketFeeAmount = (msg.value * _idToPosition[positionId].marketFee) / 10000;
-        base._updateBalance(owner(), marketFeeAmount);
+        base.updateBalance(owner(), marketFeeAmount);
 
         // Transfer funds to borrower
         (bool success, ) = _idToPosition[positionId].owner.call{
@@ -141,7 +141,7 @@ contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,Mark
         // Transfer funds to lender
         (bool success, ) = lender.call{ value: msg.value }("");
         if (!success) {
-            base._updateBalance(lender, msg.value);
+            base.updateBalance(lender, msg.value);
         }
 
         uint256 itemId = _idToPosition[positionId].itemId;
@@ -164,7 +164,7 @@ contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,Mark
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        base._updateAvailablePosition(itemId, borrower);
+        base.updateAvailablePosition(itemId, borrower);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, borrower, false);
@@ -205,7 +205,7 @@ contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,Mark
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        base._updateAvailablePosition(itemId, msg.sender);
+        base.updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);
@@ -244,7 +244,7 @@ contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,Mark
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        base._updateAvailablePosition(itemId, msg.sender);
+        base.updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);

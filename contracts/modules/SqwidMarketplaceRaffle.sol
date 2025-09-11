@@ -181,7 +181,7 @@ contract SqwidMarketplaceRaffleModule is MarketplaceModifiers,ReentrancyGuard,Ma
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Raffle].decrement();
 
-        base._updateAvailablePosition(itemId, receiver);
+        base.updateAvailablePosition(itemId, receiver);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, receiver, receiver != seller);

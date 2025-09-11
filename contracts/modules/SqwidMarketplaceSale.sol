@@ -121,7 +121,7 @@ contract SqwidMarketplaceSaleModule is MarketplaceModifiers,ReentrancyGuard,Mark
             amount
         );
 
-        base._updateAvailablePosition(itemId, msg.sender);
+        base.updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, true);
@@ -157,7 +157,7 @@ contract SqwidMarketplaceSaleModule is MarketplaceModifiers,ReentrancyGuard,Mark
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.RegularSale].decrement();
 
-        base._updateAvailablePosition(itemId, msg.sender);
+        base.updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);

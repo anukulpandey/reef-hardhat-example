@@ -15,7 +15,14 @@ import "../interfaces/ISqwidERC1155.sol";
 import "../types/MarketplaceTypes.sol";
 import "../types/MarketplaceStructs.sol";
 
-contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard , MarketplaceModifiers,MarketplaceVars,MarketplaceEvents{
+contract SqwidMarketplaceBase is
+    ERC1155Holder,
+    Ownable,
+    ReentrancyGuard,
+    MarketplaceModifiers,
+    MarketplaceVars,
+    MarketplaceEvents
+{
     using Counters for Counters.Counter;
 
     // constructor==================
@@ -429,5 +436,16 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard , Marke
         uint256 amount
     ) external {
         _createItemTransaction(positionId, tokenRecipient, saleValue, amount);
+    }
+
+    function updateAvailablePosition(
+        uint256 itemId,
+        address tokenOwner
+    ) external {
+        _updateAvailablePosition(itemId, tokenOwner);
+    }
+
+    function updateBalance(address addr, uint256 value) external {
+        _updateBalance(addr, value);
     }
 }
