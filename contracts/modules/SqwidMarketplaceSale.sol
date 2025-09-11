@@ -1,10 +1,24 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./SqwidMarketplaceBase.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "../interfaces/ISqwidMarketplaceBase.sol";
+import "../interfaces/ISqwidERC1155.sol";
+import "../types/MarketplaceStructs.sol";
+import "../types/MarketplaceTypes.sol";
+import "../utils/MarketplaceVars.sol";
+import "../utils/MarketplaceModifiers.sol";
+import "../utils/MarketplaceEvents.sol";
 
-abstract contract SqwidMarketplaceSale is SqwidMarketplaceBase{   
+contract SqwidMarketplaceSaleModule is MarketplaceModifiers,ReentrancyGuard,MarketplaceVars,MarketplaceEvents{   
     using Counters for Counters.Counter;  
+
+    ISqwidMarketplaceBase public base;
+
+    constructor(address baseAddress) {
+        base = ISqwidMarketplaceBase(baseAddress);
+    }
     
     //////////////////////////////////////////////////////////////////////////
     /////////////////////////// REGULAR SALE /////////////////////////////////
@@ -82,7 +96,7 @@ abstract contract SqwidMarketplaceSale is SqwidMarketplaceBase{
         address seller = _idToPosition[positionId].owner;
 
         // Process transaction
-        _createItemTransaction(positionId, msg.sender, msg.value, amount);
+        base.createItemTransaction(positionId, msg.sender, msg.value, amount);
 
         // Update item and item position
         _idToItem[itemId].sales.push(ItemSale(seller, msg.sender, msg.value, amount));
@@ -107,7 +121,7 @@ abstract contract SqwidMarketplaceSale is SqwidMarketplaceBase{
             amount
         );
 
-        _updateAvailablePosition(itemId, msg.sender);
+        base._updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, true);
@@ -143,7 +157,7 @@ abstract contract SqwidMarketplaceSale is SqwidMarketplaceBase{
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.RegularSale].decrement();
 
-        _updateAvailablePosition(itemId, msg.sender);
+        base._updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);

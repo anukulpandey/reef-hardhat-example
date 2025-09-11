@@ -7,6 +7,7 @@ require("dotenv").config();
 module.exports = {
   solidity: {
     version: "0.8.4",
+    
   },
 
   resolc: {

@@ -6,96 +6,19 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "../utils/MarketplaceModifiers.sol";
+import "../utils/MarketplaceVars.sol";
+import "../utils/MarketplaceEvents.sol";
 import "../interfaces/ISqwidMigrator.sol";
 import "../interfaces/INftRoyalties.sol";
 import "../interfaces/ISqwidERC1155.sol";
 import "../types/MarketplaceTypes.sol";
 import "../types/MarketplaceStructs.sol";
 
-contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
+contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard , MarketplaceModifiers,MarketplaceVars,MarketplaceEvents{
     using Counters for Counters.Counter;
 
-    Counters.Counter internal _itemIds;
-    Counters.Counter internal _positionIds;
-
-    mapping(uint256 => Item) internal _idToItem;
-    mapping(uint256 => Position) internal _idToPosition;
-    mapping(PositionState => Counters.Counter) internal _stateToCounter;
-    mapping(uint256 => AuctionData) internal _idToAuctionData;
-    mapping(uint256 => RaffleData) internal _idToRaffleData;
-    mapping(uint256 => LoanData) internal _idToLoanData;
-    // contractAddress => (tokenId => isRegistered)
-    mapping(address => mapping(uint256 => bool)) internal _registeredTokens;
-    // itemId => (ownerAddress => availablePositionId)
-    mapping(uint256 => mapping(address => uint256)) internal _itemAvailablePositions;
-
-    mapping(address => uint256) public addressBalance;
-    mapping(PositionState => uint256) public marketFees;
-    ISqwidERC1155 public sqwidERC1155;
-    ISqwidMigrator public sqwidMigrator;
-
-    // events================================
-
-    event ItemCreated(
-        uint256 indexed itemId,
-        address indexed nftContract,
-        uint256 indexed tokenId,
-        address creator
-    );
-
-    event PositionUpdate(
-        uint256 indexed positionId,
-        uint256 indexed itemId,
-        address indexed owner,
-        uint256 amount,
-        uint256 price,
-        uint256 marketFee,
-        PositionState state
-    );
-
-    event PositionDelete(uint256 indexed positionId);
-
-    event MarketItemSold(
-        uint256 indexed itemId,
-        address indexed nftContract,
-        uint256 indexed tokenId,
-        address seller,
-        address buyer,
-        uint256 price,
-        uint256 amount
-    );
-
-    event BidCreated(uint256 indexed positionId, address indexed bidder, uint256 indexed value);
-
-    event RaffleEntered(uint256 indexed positionId, address indexed addr, uint256 indexed value);
-
-    event LoanFunded(uint256 indexed positionId, address indexed funder);
-
-    event BalanceUpdated(address indexed addr, uint256 indexed value);
-
-    // modifiers=====================
-
-    modifier itemExists(uint256 itemId) {
-        require(_idToItem[itemId].itemId > 0, "SqwidMarket: Item not found");
-        _;
-    }
-
-    modifier positionInState(uint256 positionId, PositionState expectedState) {
-        require(_idToPosition[positionId].positionId > 0, "SqwidMarket: Position not found");
-        require(
-            _idToPosition[positionId].state == expectedState,
-            "SqwidMarket: Position on wrong state"
-        );
-        _;
-    }
-
-    modifier isLastVersion() {
-        require(address(sqwidMigrator) == address(0), "SqwidMarket: Not last market version");
-        _;
-    }
-
     // constructor==================
-
     constructor(uint256 marketFee_, ISqwidERC1155 sqwidERC1155_) {
         marketFees[PositionState.RegularSale] = marketFee_;
         marketFees[PositionState.Auction] = marketFee_;
@@ -108,23 +31,33 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
      * Sets market fee percentage with two decimal points.
      * E.g. 250 --> 2.5%
      */
-    function setMarketFee(uint16 marketFee_, PositionState typeFee) external onlyOwner {
+    function setMarketFee(
+        uint16 marketFee_,
+        PositionState typeFee
+    ) external onlyOwner {
         require(marketFee_ <= 1000, "SqwidMarket: Fee higher than 1000");
-        require(typeFee != PositionState.Available, "SqwidMarket: Invalid fee type");
+        require(
+            typeFee != PositionState.Available,
+            "SqwidMarket: Invalid fee type"
+        );
         marketFees[typeFee] = marketFee_;
     }
 
     /**
      * Sets new NFT contract address.
      */
-    function setNftContractAddress(ISqwidERC1155 sqwidERC1155_) external onlyOwner {
+    function setNftContractAddress(
+        ISqwidERC1155 sqwidERC1155_
+    ) external onlyOwner {
         sqwidERC1155 = sqwidERC1155_;
     }
 
     /**
      * Sets new Marketplace contract address.
      */
-    function setMigratorAddress(ISqwidMigrator sqwidMigrator_) external onlyOwner {
+    function setMigratorAddress(
+        ISqwidMigrator sqwidMigrator_
+    ) external onlyOwner {
         sqwidMigrator = sqwidMigrator_;
     }
 
@@ -136,7 +69,7 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
         require(amount > 0, "SqwidMarket: No Reef to be claimed");
 
         addressBalance[msg.sender] = 0;
-        (bool success, ) = msg.sender.call{ value: amount }("");
+        (bool success, ) = msg.sender.call{value: amount}("");
         require(success, "SqwidMarket: Error sending REEF");
 
         emit BalanceUpdated(msg.sender, 0);
@@ -190,7 +123,9 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
     /**
      * Creates new market item.
      */
-    function createItem(uint256 tokenId) public isLastVersion returns (uint256) {
+    function createItem(
+        uint256 tokenId
+    ) public isLastVersion returns (uint256) {
         require(
             sqwidERC1155.balanceOf(msg.sender, tokenId) > 0,
             "SqwidMarket: Address balance too low"
@@ -224,7 +159,9 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
     /**
      * Registers in the marketplace the ownership of an existing item.
      */
-    function addAvailableTokens(uint256 itemId) public isLastVersion itemExists(itemId) {
+    function addAvailableTokens(
+        uint256 itemId
+    ) public isLastVersion itemExists(itemId) {
         require(
             ISqwidERC1155(_idToItem[itemId].nftContract).balanceOf(
                 msg.sender,
@@ -239,7 +176,6 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
 
         _updateAvailablePosition(itemId, msg.sender);
     }
-
 
     ////////////////////////////////////////////////////////////////////////
     /////////////////////////// GETTERS ////////////////////////////////////
@@ -257,19 +193,21 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
         return _idToItem[itemId];
     }
 
-    function fetchPosition(uint256 positionId) external view returns (Position memory) {
+    function fetchPosition(
+        uint256 positionId
+    ) external view returns (Position memory) {
         return _idToPosition[positionId];
     }
 
-    function fetchStateCount(PositionState state) external view returns (uint256) {
+    function fetchStateCount(
+        PositionState state
+    ) external view returns (uint256) {
         return _stateToCounter[state].current();
     }
 
-    function fetchAuctionData(uint256 positionId)
-        external
-        view
-        returns (AuctionDataResponse memory)
-    {
+    function fetchAuctionData(
+        uint256 positionId
+    ) external view returns (AuctionDataResponse memory) {
         return
             AuctionDataResponse(
                 _idToAuctionData[positionId].deadline,
@@ -280,16 +218,17 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
             );
     }
 
-    function fetchBid(uint256 positionId, uint256 bidIndex)
-        external
-        view
-        returns (address, uint256)
-    {
+    function fetchBid(
+        uint256 positionId,
+        uint256 bidIndex
+    ) external view returns (address, uint256) {
         address addr = _idToAuctionData[positionId].indexToAddress[bidIndex];
         return (addr, _idToAuctionData[positionId].addressToAmount[addr]);
     }
 
-    function fetchRaffleData(uint256 positionId) external view returns (RaffleDataResponse memory) {
+    function fetchRaffleData(
+        uint256 positionId
+    ) external view returns (RaffleDataResponse memory) {
         return
             RaffleDataResponse(
                 _idToRaffleData[positionId].deadline,
@@ -298,16 +237,17 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
             );
     }
 
-    function fetchRaffleEntry(uint256 positionId, uint256 entryIndex)
-        external
-        view
-        returns (address, uint256)
-    {
+    function fetchRaffleEntry(
+        uint256 positionId,
+        uint256 entryIndex
+    ) external view returns (address, uint256) {
         address addr = _idToRaffleData[positionId].indexToAddress[entryIndex];
         return (addr, _idToRaffleData[positionId].addressToAmount[addr]);
     }
 
-    function fetchLoanData(uint256 positionId) external view returns (LoanData memory) {
+    function fetchLoanData(
+        uint256 positionId
+    ) external view returns (LoanData memory) {
         return _idToLoanData[positionId];
     }
 
@@ -326,8 +266,9 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
         address payable _seller
     ) internal returns (uint256 netSaleAmount) {
         // Get amount of royalties to pay and recipient
-        (address royaltiesReceiver, uint256 royaltiesAmount) = INftRoyalties(_nftContract)
-            .royaltyInfo(_tokenId, _grossSaleValue);
+        (address royaltiesReceiver, uint256 royaltiesAmount) = INftRoyalties(
+            _nftContract
+        ).royaltyInfo(_tokenId, _grossSaleValue);
 
         // If seller and royalties receiver are the same, royalties will not be deduced
         if (_seller == royaltiesReceiver) {
@@ -339,7 +280,9 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
 
         // Transfer royalties to rightholder if amount is not 0
         if (royaltiesAmount > 0) {
-            (bool success, ) = royaltiesReceiver.call{ value: royaltiesAmount }("");
+            (bool success, ) = royaltiesReceiver.call{value: royaltiesAmount}(
+                ""
+            );
             if (!success) {
                 _updateBalance(royaltiesReceiver, royaltiesAmount);
             }
@@ -351,16 +294,18 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
     /**
      * Gets a pseudo-random number
      */
-    function _pseudoRand() internal view returns (uint256) {
+    function pseudoRand() external view returns (uint256) {
         uint256 seed = uint256(
             keccak256(
                 abi.encodePacked(
                     block.timestamp +
                         block.prevrandao +
-                        ((uint256(keccak256(abi.encodePacked(block.coinbase)))) /
-                            (block.timestamp)) +
+                        ((
+                            uint256(keccak256(abi.encodePacked(block.coinbase)))
+                        ) / (block.timestamp)) +
                         block.gaslimit +
-                        ((uint256(keccak256(abi.encodePacked(msg.sender)))) / (block.timestamp)) +
+                        ((uint256(keccak256(abi.encodePacked(msg.sender)))) /
+                            (block.timestamp)) +
                         block.number
                 )
             )
@@ -383,18 +328,28 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
         address nftContract = _idToItem[itemId].nftContract;
         uint256 tokenId = _idToItem[itemId].tokenId;
         address payable seller = _idToPosition[positionId].owner;
-        if (IERC165(nftContract).supportsInterface(type(INftRoyalties).interfaceId)) {
-            saleValue = _deduceRoyalties(nftContract, tokenId, saleValue, seller);
+        if (
+            IERC165(nftContract).supportsInterface(
+                type(INftRoyalties).interfaceId
+            )
+        ) {
+            saleValue = _deduceRoyalties(
+                nftContract,
+                tokenId,
+                saleValue,
+                seller
+            );
         }
 
         // Allocate market fee into owner balance
-        uint256 marketFeeAmount = (saleValue * _idToPosition[positionId].marketFee) / 10000;
+        uint256 marketFeeAmount = (saleValue *
+            _idToPosition[positionId].marketFee) / 10000;
         _updateBalance(owner(), marketFeeAmount);
 
         uint256 netSaleValue = saleValue - marketFeeAmount;
 
         // Transfer value of the transaction to the seller
-        (bool success, ) = seller.call{ value: netSaleValue }("");
+        (bool success, ) = seller.call{value: netSaleValue}("");
         if (!success) {
             _updateBalance(seller, netSaleValue);
         }
@@ -412,7 +367,10 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
     /**
      * Creates new position or updates amount in exising one for receiver of tokens.
      */
-    function _updateAvailablePosition(uint256 itemId, address tokenOwner) internal {
+    function _updateAvailablePosition(
+        uint256 itemId,
+        address tokenOwner
+    ) internal {
         uint256 receiverPositionId;
         uint256 amount = ISqwidERC1155(_idToItem[itemId].nftContract).balanceOf(
             tokenOwner,
@@ -458,5 +416,18 @@ contract SqwidMarketplaceBase is ERC1155Holder, Ownable, ReentrancyGuard {
     function _updateBalance(address addr, uint256 value) internal {
         addressBalance[addr] += value;
         emit BalanceUpdated(addr, addressBalance[addr]);
+    }
+
+    function getMarketFee(PositionState state) external view returns (uint256) {
+        return marketFees[state];
+    }
+
+    function createItemTransaction(
+        uint256 positionId,
+        address tokenRecipient,
+        uint256 saleValue,
+        uint256 amount
+    ) external {
+        _createItemTransaction(positionId, tokenRecipient, saleValue, amount);
     }
 }

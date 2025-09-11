@@ -2,9 +2,24 @@
 pragma solidity ^0.8.4;
 
 import "./SqwidMarketplaceBase.sol";
+import "../interfaces/ISqwidMarketplaceBase.sol";
+import "../utils/MarketplaceModifiers.sol";
+import "../types/MarketplaceStructs.sol";
+import "../types/MarketplaceTypes.sol";
+import "../utils/MarketplaceVars.sol";
+import "../utils/MarketplaceEvents.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
+contract SqwidMarketplaceLoanModule is MarketplaceModifiers,ReentrancyGuard,MarketplaceVars,MarketplaceEvents,Ownable{
     using Counters for Counters.Counter; 
+
+    ISqwidMarketplaceBase public base;
+
+    constructor(address baseAddress) {
+        base = ISqwidMarketplaceBase(baseAddress);
+    }
+
     /////////////////////////////////////////////////////////////////////
     /////////////////////////// LOAN ////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
@@ -96,7 +111,7 @@ abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
 
         // Allocate market fee into owner balance
         uint256 marketFeeAmount = (msg.value * _idToPosition[positionId].marketFee) / 10000;
-        _updateBalance(owner(), marketFeeAmount);
+        base._updateBalance(owner(), marketFeeAmount);
 
         // Transfer funds to borrower
         (bool success, ) = _idToPosition[positionId].owner.call{
@@ -126,7 +141,7 @@ abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
         // Transfer funds to lender
         (bool success, ) = lender.call{ value: msg.value }("");
         if (!success) {
-            _updateBalance(lender, msg.value);
+            base._updateBalance(lender, msg.value);
         }
 
         uint256 itemId = _idToPosition[positionId].itemId;
@@ -149,7 +164,7 @@ abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        _updateAvailablePosition(itemId, borrower);
+        base._updateAvailablePosition(itemId, borrower);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, borrower, false);
@@ -190,7 +205,7 @@ abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        _updateAvailablePosition(itemId, msg.sender);
+        base._updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);
@@ -229,7 +244,7 @@ abstract contract SqwidMarketplaceLoan is SqwidMarketplaceBase{
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Loan].decrement();
 
-        _updateAvailablePosition(itemId, msg.sender);
+        base._updateAvailablePosition(itemId, msg.sender);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, msg.sender, false);

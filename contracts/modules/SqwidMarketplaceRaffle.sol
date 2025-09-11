@@ -1,10 +1,25 @@
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.4;
 
-import "./SqwidMarketplaceBase.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "../interfaces/ISqwidMarketplaceBase.sol";
+import "../interfaces/ISqwidERC1155.sol";
+import "../types/MarketplaceStructs.sol";
+import "../types/MarketplaceTypes.sol";
+import "../utils/MarketplaceVars.sol";
+import "../utils/MarketplaceModifiers.sol";
+import "../utils/MarketplaceEvents.sol";
 
-abstract contract SqwidMarketplaceRaffle is SqwidMarketplaceBase{
+contract SqwidMarketplaceRaffleModule is MarketplaceModifiers,ReentrancyGuard,MarketplaceVars,MarketplaceEvents{
     using Counters for Counters.Counter; 
+
+    ISqwidMarketplaceBase public base;
+
+    constructor(address baseAddress) {
+        base = ISqwidMarketplaceBase(baseAddress);
+    }
+
     ///////////////////////////////////////////////////////////////////////
     /////////////////////////// RAFFLE ////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////
@@ -122,7 +137,7 @@ abstract contract SqwidMarketplaceRaffle is SqwidMarketplaceBase{
         if (totalAddresses > 0) {
             // Choose winner for the raffle
             uint256 totalValue = _idToRaffleData[positionId].totalValue;
-            uint256 indexWinner = _pseudoRand() % totalValue;
+            uint256 indexWinner = base.pseudoRand() % totalValue;
             uint256 lastIndex = 0;
             for (uint256 i; i < totalAddresses; i++) {
                 address currAddress = _idToRaffleData[positionId].indexToAddress[i];
@@ -130,7 +145,7 @@ abstract contract SqwidMarketplaceRaffle is SqwidMarketplaceBase{
                 if (indexWinner < lastIndex) {
                     receiver = currAddress;
                     // Create transaction to winner
-                    _createItemTransaction(positionId, receiver, totalValue * 1e18, amount);
+                    base.createItemTransaction(positionId, receiver, totalValue * 1e18, amount);
                     // Add sale to item
                     _idToItem[itemId].sales.push(
                         ItemSale(seller, receiver, totalValue * 1e18, amount)
@@ -166,7 +181,7 @@ abstract contract SqwidMarketplaceRaffle is SqwidMarketplaceBase{
         _idToItem[itemId].positionCount--;
         _stateToCounter[PositionState.Raffle].decrement();
 
-        _updateAvailablePosition(itemId, receiver);
+        base._updateAvailablePosition(itemId, receiver);
 
         if (address(sqwidMigrator) != address(0)) {
             sqwidMigrator.positionClosed(itemId, receiver, receiver != seller);
