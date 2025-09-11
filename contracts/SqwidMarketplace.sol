@@ -1,18 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./SaleMarketplace.sol";
-import "./AuctionMarketplace.sol";
-import "./RaffleMarketplace.sol";
-import "./LoanMarketplace.sol";
+import "./modules/SqwidMarketplaceBase.sol";
+import "./modules/SqwidMarketplaceAuction.sol";
+import "./modules/SqwidMarketplaceRaffle.sol";
+import "./modules/SqwidMarketplaceLoan.sol";
+import "./modules/SqwidMarketplaceSale.sol";
 
 contract SqwidMarketplace is 
-    SaleMarketplace, 
-    AuctionMarketplace, 
-    RaffleMarketplace, 
-    LoanMarketplace 
+    SqwidMarketplaceBase,
+    SqwidMarketplaceAuction,
+    SqwidMarketplaceRaffle,
+    SqwidMarketplaceLoan,
+    SqwidMarketplaceSale 
 {
-    constructor(uint256 _marketFee, address _erc1155) 
-        BaseMarketplace(_marketFee, _erc1155) 
+    constructor(uint256 marketFee_, ISqwidERC1155 sqwidERC1155_)
+        SqwidMarketplaceBase(marketFee_, sqwidERC1155_)
     {}
 }

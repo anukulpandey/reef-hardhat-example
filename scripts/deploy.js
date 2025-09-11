@@ -6,19 +6,21 @@ async function deploy() {
   console.log(`Deploying contracts using ${deployerAddress}`);
   
   // Deploy SqwidERC1155
-  console.log("Deploying SqwidERC1155...");
-  const sqwidERC1155 = await ethers.getContractFactory("SqwidERC1155");
-  const sqwidERC1155Instance = await sqwidERC1155.deploy();
-  await sqwidERC1155Instance.waitForDeployment();
-  const sqwidERC1155Address=await sqwidERC1155Instance.getAddress();
-  console.log(`SqwidERC1155 deployed to : ${sqwidERC1155Address}`);
-  
+  // console.log("Deploying SqwidERC1155...");
+  // const sqwidERC1155 = await ethers.getContractFactory("SqwidERC1155");
+  // const sqwidERC1155Instance = await sqwidERC1155.deploy();
+  // await sqwidERC1155Instance.waitForDeployment();
+  // const sqwidERC1155Address=await sqwidERC1155Instance.getAddress();
+  // console.log(`SqwidERC1155 deployed to : ${sqwidERC1155Address}`);
+
+  const sqwidErc1155Address = "0xca6224f40585618F1e5C430c37CfDFB43a9D08DD";
+  console.log("Deployed SqwidERC1155 to : ",sqwidErc1155Address);
 
   // Deploy SqwidMarketplace
   console.log("Deploying SqwidMarketplace...");
   const SqwidMarketplace = await ethers.getContractFactory("SqwidMarketplace");
   const marketFee = 250; // 2.5%
-  const sqwidMarketplaceInstance = await SqwidMarketplace.deploy(marketFee, sqwidERC1155Address);
+  const sqwidMarketplaceInstance = await SqwidMarketplace.deploy(marketFee, sqwidErc1155Address);
   await sqwidMarketplaceInstance.waitForDeployment();
   const sqwidMarketplaceAddress = await sqwidMarketplaceInstance.getAddress();
   console.log(`SqwidMarketplace deployed in ${sqwidMarketplaceAddress}`);
