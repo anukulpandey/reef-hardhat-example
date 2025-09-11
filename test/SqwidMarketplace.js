@@ -5,7 +5,7 @@ describe("SqwidMarketPlace", function () {
   let sqwidMarketplace, owner, addr1;
 
   // use the address you already deployed
-  const deployedMarketplaceAddress = "0x86fB964730bebd04A7182CB700d74c995B15dC57";
+  const deployedMarketplaceAddress = "0xcD574ff90f85183a46cE65c79d3405189adc414E";
 
   before(async function () {
     [owner, addr1] = await ethers.getSigners();
