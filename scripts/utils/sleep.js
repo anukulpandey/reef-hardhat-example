@@ -4,12 +4,10 @@ async function waitForIndexingAndVerify(contractAddress, contractName, verifyFn,
   let retries = 0;
   while (retries < maxRetries) {
     try {
-      // 1. Check if Blockscout indexed the contract
       const resp = await axios.get(`${process.env.VERIFY_URL}/api/v2/smart-contracts/${contractAddress}`);
       if (resp.status === 200) {
         console.log("✅ Contract indexed on Blockscout. Attempting verification...");
 
-        // 2. Run your verify function
         await verifyFn(contractAddress, contractName);
         return;
       }
