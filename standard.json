@@ -1,0 +1,24 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/Flipper.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.22;\n\ncontract Flipper {\n    bool private value;\n\n    event Flipped(bool indexed oldValue, bool indexed newValue);\n\n    constructor(bool _initialValue) {\n        value = _initialValue;\n    }\n\n    function flip() external {\n        bool old = value;\n        value = !old;\n        emit Flipped(old, value);\n    }\n\n    function get() external view returns (bool) {\n        return value;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 400
+    },
+    "outputSelection": {
+      "*": {
+        "": [
+          "*"
+        ],
+        "*": [
+          "*"
+        ]
+      }
+    }
+  }
+}

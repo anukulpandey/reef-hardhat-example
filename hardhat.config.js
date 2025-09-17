@@ -8,6 +8,13 @@ module.exports = {
   solidity: "0.8.28",
   resolc: {
     compilerSource: "npm",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 400,
+      },
+    },
+    standardJson:true,
   },
   defaultNetwork:"reef",
   networks: {
