@@ -45,8 +45,6 @@ async function verify(contractAddress, contractNameInput) {
 
   const url = `${process.env.VERIFY_URL}/api/v2/smart-contracts/${contractAddress}/verification/via/standard-input`;
 
-  console.log("buildInfo===",buildInfo);
-
   try {
     console.log(`Uploading standard.json for ${contractName} at ${contractAddress}`);
     const resp = await axios.post(url, form, {
