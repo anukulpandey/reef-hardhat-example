@@ -5,12 +5,12 @@ async function deploy() {
   deployerAddress = account.address;
   console.log(`Deploying contracts using ${deployerAddress}`);
   
-  // Deploy ERC20
-  console.log("Deploying MyToken...");
-  const myToken = await ethers.getContractFactory("MyToken");
-  const myTokenInstance = await myToken.deploy(deployerAddress);
-  await myTokenInstance.waitForDeployment();
-  console.log(`MyToken deployed to : ${await myTokenInstance.getAddress()}`);
+  // Deploy Flipper
+  console.log("Deploying Flipper...");
+  const flipper = await ethers.getContractFactory("Flipper");
+  const flipperInstance = await flipper.deploy(false);
+  await flipperInstance.waitForDeployment();
+  console.log(`Flipper deployed to : ${await flipperInstance.getAddress()}`);
   
 }
 

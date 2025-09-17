@@ -9,6 +9,7 @@ module.exports = {
   resolc: {
     compilerSource: "npm",
   },
+  defaultNetwork:"reef",
   networks: {
     hardhat: {
       polkavm: true,
