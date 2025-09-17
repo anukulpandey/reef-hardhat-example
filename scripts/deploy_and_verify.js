@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 const axios = require("axios");
 const FormData = require("form-data");
+const { waitForIndexingAndVerify } = require("./utils/sleep");
 const { verify } = require("./utils/verify");
-const { sleep } = require("./utils/sleep");
 
 async function deployAndVerify() {
   const [account] = await ethers.getSigners();
@@ -17,11 +17,8 @@ async function deployAndVerify() {
   const contractAddress = await flipper.getAddress();
   console.log(`Flipper deployed to: ${contractAddress}`);
 
-  // wait for the contract to be indexed
-  sleep(60000);
-
   // Verify Flipper
-  const verification = await verify(contractAddress, "Flipper");
+  await waitForIndexingAndVerify(contractAddress, "Flipper",verify);
 
 }
 

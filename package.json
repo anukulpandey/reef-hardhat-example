@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile":"npx hardhat compile --network reef",
+    "deploy": "npx hardhat run scripts/deploy.js --network reef",
+    "deploy:verify": "npx hardhat run scripts/deploy_and_verify.js --network reef"
   },
   "keywords": [],
-  "author": "",
+  "author": "@anukulpandey",
   "license": "ISC",
   "type": "commonjs",
   "description": "",
