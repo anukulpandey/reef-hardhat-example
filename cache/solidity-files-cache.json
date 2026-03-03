@@ -1,0 +1,53 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/Flipper.sol": {
+      "lastModificationDate": 1772528226221,
+      "contentHash": "092ef07d009e194e122713120d3c6e8a",
+      "sourceName": "contracts/Flipper.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.22"
+      ],
+      "artifacts": [
+        "Flipper"
+      ]
+    }
+  }
+}

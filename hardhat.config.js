@@ -19,7 +19,7 @@ module.exports = {
   defaultNetwork:"reef",
   networks: {
     hardhat: {
-      polkavm: true,
+      polkadot: true,
       forking: {
         url: "wss://westend-asset-hub-rpc.polkadot.io",
       },
@@ -29,11 +29,12 @@ module.exports = {
       },
     },
     localNode: {
-      polkavm: true,
+      polkadot: true,
       url: `http://127.0.0.1:8545`,
+      accounts: [process.env.PRIVATE_KEY],
     },
     reef: {
-      polkavm: true,
+      polkadot: true,
       url: 'http://34.56.133.26:8545',
       accounts: [process.env.PRIVATE_KEY],
     },
