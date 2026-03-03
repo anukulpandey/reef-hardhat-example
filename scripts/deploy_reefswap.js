@@ -46,34 +46,34 @@ async function deployLarge(contractName, constructorArgs) {
 
 async function main() {
   const [deployer] = await ethers.getSigners();
-  console.log(`Deploying ReefSwapV2 contracts with: ${deployer.address}`);
+  console.log(`Deploying upstream Reefswap contracts with: ${deployer.address}`);
 
-  // 1. Deploy WREEF (small — normal hardhat path)
-  console.log("\nDeploying WREEF...");
-  const WREEF = await ethers.getContractFactory("WREEF");
-  const wreef = await WREEF.deploy();
-  await wreef.waitForDeployment();
-  const wreefAddress = await wreef.getAddress();
-  console.log(`WREEF deployed to: ${wreefAddress}`);
+  // 1. Deploy fresh wrapped native token for this deployment.
+  console.log("\nDeploying WrappedREEF...");
+  const WrappedREEF = await ethers.getContractFactory("WrappedREEF");
+  const wrappedReef = await WrappedREEF.deploy();
+  await wrappedReef.waitForDeployment();
+  const wrappedNativeAddress = await wrappedReef.getAddress();
+  console.log(`WrappedREEF deployed to: ${wrappedNativeAddress}`);
 
-  // 2. Deploy ReefSwapV2Factory (small — normal hardhat path)
-  console.log("\nDeploying ReefSwapV2Factory...");
-  const Factory = await ethers.getContractFactory("ReefSwapV2Factory");
+  // 2. Deploy ReefswapV2Factory (small — normal hardhat path)
+  console.log("\nDeploying ReefswapV2Factory...");
+  const Factory = await ethers.getContractFactory("ReefswapV2Factory");
   const factory = await Factory.deploy(deployer.address);
   await factory.waitForDeployment();
   const factoryAddress = await factory.getAddress();
-  console.log(`ReefSwapV2Factory deployed to: ${factoryAddress}`);
+  console.log(`ReefswapV2Factory deployed to: ${factoryAddress}`);
 
-  // 3. Deploy ReefSwapV2Router02 (large — bypass micro-eth-signer EIP-3860 check)
-  console.log("\nDeploying ReefSwapV2Router02...");
-  const routerAddress = await deployLarge("ReefSwapV2Router02", [
+  // 3. Deploy ReefswapV2Router02 (large — bypass micro-eth-signer EIP-3860 check)
+  console.log("\nDeploying ReefswapV2Router02...");
+  const routerAddress = await deployLarge("ReefswapV2Router02", [
     factoryAddress,
-    wreefAddress,
+    wrappedNativeAddress,
   ]);
-  console.log(`ReefSwapV2Router02 deployed to: ${routerAddress}`);
+  console.log(`ReefswapV2Router02 deployed to: ${routerAddress}`);
 
   console.log("\n--- Deployment Summary ---");
-  console.log(`WREEF:              ${wreefAddress}`);
+  console.log(`WrappedREEF:        ${wrappedNativeAddress}`);
   console.log(`Factory:            ${factoryAddress}`);
   console.log(`Router02:           ${routerAddress}`);
   console.log(`Fee setter:         ${deployer.address}`);
