@@ -5,7 +5,8 @@
   "scripts": {
     "compile":"npx hardhat compile --network reef",
     "deploy": "npx hardhat run scripts/deploy.js --network localNode",
-    "deploy:verify": "npx hardhat run scripts/deploy_and_verify.js --network reef"
+    "deploy:verify": "npx hardhat run scripts/deploy_and_verify.js --network reef",
+    "deploy:reefswap": "npx hardhat run scripts/deploy_reefswap.js --network localNode"
   },
   "keywords": [],
   "author": "@anukulpandey",
