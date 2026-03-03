@@ -48,6 +48,803 @@
       "artifacts": [
         "Flipper"
       ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/ReefSwapV2ERC20.sol": {
+      "lastModificationDate": 1772530430621,
+      "contentHash": "6b1d04dd3ffcdd0188d240d5dcc61d75",
+      "sourceName": "contracts/reefswap/core/ReefSwapV2ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IReefSwapV2ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ReefSwapV2ERC20"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/interfaces/IReefSwapV2ERC20.sol": {
+      "lastModificationDate": 1772530383721,
+      "contentHash": "32f64dbd5b9b5d4450a75a722ea64fb7",
+      "sourceName": "contracts/reefswap/core/interfaces/IReefSwapV2ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2ERC20"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/ReefSwapV2Pair.sol": {
+      "lastModificationDate": 1772530467717,
+      "contentHash": "52288b3fc261cc3f956d301cb3a89b51",
+      "sourceName": "contracts/reefswap/core/ReefSwapV2Pair.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./ReefSwapV2ERC20.sol",
+        "./interfaces/IReefSwapV2Factory.sol",
+        "./interfaces/IReefSwapV2Pair.sol",
+        "./interfaces/IReefSwapV2Callee.sol",
+        "./libraries/Math.sol",
+        "./libraries/UQ112x112.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20Minimal",
+        "ReefSwapV2Pair"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/interfaces/IReefSwapV2Factory.sol": {
+      "lastModificationDate": 1772530388655,
+      "contentHash": "7fe9b2747e35dad10ea0d755c0b1ee22",
+      "sourceName": "contracts/reefswap/core/interfaces/IReefSwapV2Factory.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2Factory"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/interfaces/IReefSwapV2Pair.sol": {
+      "lastModificationDate": 1772530395214,
+      "contentHash": "76e29b09689ded95603c7ed9b29e47a6",
+      "sourceName": "contracts/reefswap/core/interfaces/IReefSwapV2Pair.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./IReefSwapV2ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2Pair"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/interfaces/IReefSwapV2Callee.sol": {
+      "lastModificationDate": 1772530398931,
+      "contentHash": "41f14b3bf4d3dccee749dcaae4ccc900",
+      "sourceName": "contracts/reefswap/core/interfaces/IReefSwapV2Callee.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2Callee"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/libraries/UQ112x112.sol": {
+      "lastModificationDate": 1772530415218,
+      "contentHash": "0787e25156f290c65ee600e564eb0d2f",
+      "sourceName": "contracts/reefswap/core/libraries/UQ112x112.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "UQ112x112"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/libraries/Math.sol": {
+      "lastModificationDate": 1772530409311,
+      "contentHash": "d788e7ef4c86e69746eec6fe2cf714eb",
+      "sourceName": "contracts/reefswap/core/libraries/Math.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Math"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/libraries/ReefSwapV2Library.sol": {
+      "lastModificationDate": 1772530515101,
+      "contentHash": "7b3d16663d718f964d631a9e111a4d6c",
+      "sourceName": "contracts/reefswap/periphery/libraries/ReefSwapV2Library.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "../../core/interfaces/IReefSwapV2Pair.sol",
+        "../../core/interfaces/IReefSwapV2Factory.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ReefSwapV2Library"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/ReefSwapV2Router02.sol": {
+      "lastModificationDate": 1772530579488,
+      "contentHash": "217f94d29990c980eaca57517b22aff1",
+      "sourceName": "contracts/reefswap/periphery/ReefSwapV2Router02.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IReefSwapV2Router02.sol",
+        "./interfaces/IWREEF.sol",
+        "./libraries/ReefSwapV2Library.sol",
+        "./libraries/TransferHelper.sol",
+        "../core/interfaces/IReefSwapV2Factory.sol",
+        "../core/interfaces/IReefSwapV2Pair.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20",
+        "ReefSwapV2Router02"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/interfaces/IReefSwapV2Router02.sol": {
+      "lastModificationDate": 1772530495728,
+      "contentHash": "b24564c65c04df76004cb539edfe3271",
+      "sourceName": "contracts/reefswap/periphery/interfaces/IReefSwapV2Router02.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./IReefSwapV2Router01.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2Router02"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/interfaces/IWREEF.sol": {
+      "lastModificationDate": 1772530477373,
+      "contentHash": "f6d72a76ed4a5c74801bc7dfb5cba2f2",
+      "sourceName": "contracts/reefswap/periphery/interfaces/IWREEF.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IWREEF"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/libraries/TransferHelper.sol": {
+      "lastModificationDate": 1772530502064,
+      "contentHash": "307accf47dc91b64d13dde54489a5c53",
+      "sourceName": "contracts/reefswap/periphery/libraries/TransferHelper.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "TransferHelper"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/interfaces/IReefSwapV2Router01.sol": {
+      "lastModificationDate": 1772530613743,
+      "contentHash": "b970a25af0417e83569dde18e5343360",
+      "sourceName": "contracts/reefswap/periphery/interfaces/IReefSwapV2Router01.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IReefSwapV2Router01"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/core/ReefSwapV2Factory.sol": {
+      "lastModificationDate": 1772530438601,
+      "contentHash": "cb5a954b75f9fbb3372c0c1aa08f3ade",
+      "sourceName": "contracts/reefswap/core/ReefSwapV2Factory.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IReefSwapV2Factory.sol",
+        "./interfaces/IReefSwapV2Pair.sol",
+        "./ReefSwapV2Pair.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "ReefSwapV2Factory"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/reefswap/periphery/WREEF.sol": {
+      "lastModificationDate": 1772530669125,
+      "contentHash": "28301111e43e235ed5591b6323ab7a0f",
+      "sourceName": "contracts/reefswap/periphery/WREEF.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "WREEF"
+      ]
     }
   }
 }
