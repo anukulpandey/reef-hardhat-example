@@ -2,6 +2,7 @@
 pragma solidity ^0.8.28;
 
 import '../interfaces/IReefswapV2Pair.sol';
+import '../ReefswapV2Pair.sol';
 
 import "./SafeMath2.sol";
 
@@ -18,6 +19,7 @@ library ReefswapV2Library {
     // calculates the CREATE2 address for a pair without making any external calls
     function pairFor(address factory, address tokenA, address tokenB) internal pure returns (address pair) {
         (address token0, address token1) = sortTokens(tokenA, tokenB);
+        bytes32 initCodeHash = keccak256(type(ReefswapV2Pair).creationCode);
         pair = address(
             uint160(
                 uint(
@@ -26,7 +28,7 @@ library ReefswapV2Library {
                             hex'ff',
                             factory,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex'5ab3fa688c4bf6e08fa334d5f13c17175ae2e87dee7ac66682e2e10a471ef881' // init code hash
+                            initCodeHash
                         )
                     )
                 )

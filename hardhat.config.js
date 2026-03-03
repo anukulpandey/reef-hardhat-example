@@ -3,6 +3,15 @@ require("@parity/hardhat-polkadot");
 
 require("dotenv").config();
 
+const hardhatPolkadotEnabled = process.env.HARDHAT_POLKADOT === "true";
+const hardhatAdapterBinaryPath = process.env.ETH_RPC_ADAPTER_BINARY_PATH;
+
+if (hardhatPolkadotEnabled && !hardhatAdapterBinaryPath) {
+  throw new Error(
+    "HARDHAT_POLKADOT=true requires ETH_RPC_ADAPTER_BINARY_PATH to be set"
+  );
+}
+
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.28",
@@ -18,16 +27,21 @@ module.exports = {
   },
   defaultNetwork:"reef",
   networks: {
-    hardhat: {
-      polkadot: true,
-      forking: {
-        url: "wss://westend-asset-hub-rpc.polkadot.io",
-      },
-      adapterConfig: {
-        adapterBinaryPath: 'INSERT_PATH_TO_ETH_RPC_ADAPTER',
-        dev: true,
-      },
-    },
+    hardhat: hardhatPolkadotEnabled
+      ? {
+          polkadot: true,
+          allowUnlimitedContractSize: true,
+          forking: {
+            url: "wss://westend-asset-hub-rpc.polkadot.io",
+          },
+          adapterConfig: {
+            adapterBinaryPath: hardhatAdapterBinaryPath,
+            dev: true,
+          },
+        }
+      : {
+          allowUnlimitedContractSize: true,
+        },
     localNode: {
       polkadot: true,
       url: `http://127.0.0.1:8545`,
