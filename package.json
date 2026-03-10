@@ -7,7 +7,12 @@
     "deploy": "npx hardhat run scripts/deploy.js --network localNode",
     "deploy:verify": "npx hardhat run scripts/deploy_and_verify.js --network reef",
     "deploy:reefswap": "npx hardhat run scripts/deploy_reefswap.js --network localNode",
-    "test:reefswap": "npx hardhat test test/reefswap/Reefswap.deep.test.js --network hardhat"
+    "deploy:token": "npx hardhat run scripts/deploy_token.js --network localNode",
+    "seed:reefswap": "npx hardhat run scripts/bootstrap_reefswap_activity.js --network localNode",
+    "seed:reefswap:full": "npx hardhat run scripts/bootstrap_reefswap_full.js --network localNode",
+    "test:reefswap:deep": "npx hardhat test test/reefswap/Reefswap.deep.test.js --network hardhat",
+    "test:reefswap:deep:localhost": "HARDHAT_FORK_URL=http://127.0.0.1:8545 npx hardhat test test/reefswap/Reefswap.deep.test.js --network hardhat",
+    "test:reefswap": "npx hardhat test test/reefswap/Reefswap.localhost.test.js --network localhost8545"
   },
   "keywords": [],
   "author": "@anukulpandey",

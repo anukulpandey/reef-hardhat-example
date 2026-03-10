@@ -1,8 +1,13 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const hre = require("hardhat");
+const { ethers } = hre;
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 const INITIAL_SUPPLY = ethers.parseEther("1000000");
+const LOCAL_RPC_NETWORKS = new Set(["localNode", "localhost8545"]);
+
+let cachedActors;
+const deployerNonces = new Map();
 
 function sqrt(value) {
   if (value < 2n) {
@@ -34,33 +39,142 @@ async function deadlineAfter(seconds = 3600) {
   return BigInt(block.timestamp + seconds);
 }
 
+function isLocalRpcNetwork() {
+  return LOCAL_RPC_NETWORKS.has(hre.network.name);
+}
+
+async function signerAddress(signer) {
+  return signer.address ?? signer.getAddress();
+}
+
+async function ensureFunded(owner, wallet, minimumBalance) {
+  const balance = await ethers.provider.getBalance(wallet.address);
+  if (balance >= minimumBalance) {
+    return;
+  }
+  const topUp = minimumBalance - balance + ethers.parseEther("1");
+  const tx = await owner.sendTransaction({ to: wallet.address, value: topUp });
+  await tx.wait();
+}
+
+async function getActors() {
+  if (cachedActors) {
+    return cachedActors;
+  }
+
+  const signers = await ethers.getSigners();
+  if (signers.length >= 4 && !isLocalRpcNetwork()) {
+    cachedActors = {
+      owner: signers[0],
+      alice: signers[1],
+      bob: signers[2],
+      feeTo: signers[3],
+    };
+    return cachedActors;
+  }
+
+  const provider = ethers.provider;
+  if (!process.env.PRIVATE_KEY) {
+    throw new Error("PRIVATE_KEY is required for local RPC ReefSwap deep tests");
+  }
+
+  const owner = new ethers.NonceManager(new ethers.Wallet(process.env.PRIVATE_KEY, provider));
+  owner.address = await owner.getAddress();
+  const alice = new ethers.NonceManager(ethers.Wallet.createRandom().connect(provider));
+  alice.address = await alice.getAddress();
+  const bob = new ethers.NonceManager(ethers.Wallet.createRandom().connect(provider));
+  bob.address = await bob.getAddress();
+  const feeTo = new ethers.NonceManager(ethers.Wallet.createRandom().connect(provider));
+  feeTo.address = await feeTo.getAddress();
+
+  const minimumBalance = ethers.parseEther("50");
+  await ensureFunded(owner, alice, minimumBalance);
+  await ensureFunded(owner, bob, minimumBalance);
+  await ensureFunded(owner, feeTo, minimumBalance);
+
+  cachedActors = { owner, alice, bob, feeTo };
+  return cachedActors;
+}
+
+async function deployContract(contractName, args, deployer) {
+  const factory = await ethers.getContractFactory(contractName, deployer);
+  if (!isLocalRpcNetwork()) {
+    const contract = await factory.deploy(...args);
+    await contract.waitForDeployment();
+    return contract;
+  }
+
+  const deployTx = await factory.getDeployTransaction(...args);
+  let gasLimit;
+  try {
+    gasLimit = await ethers.provider.estimateGas({
+      ...deployTx,
+      from: await signerAddress(deployer),
+    });
+  } catch {
+    gasLimit = 12_000_000n;
+  }
+
+  const deployerAddress = await signerAddress(deployer);
+  if (!deployerNonces.has(deployerAddress)) {
+    deployerNonces.set(
+      deployerAddress,
+      await ethers.provider.getTransactionCount(deployerAddress, "pending")
+    );
+  }
+  const nonce = deployerNonces.get(deployerAddress);
+  deployerNonces.set(deployerAddress, nonce + 1);
+
+  const feeData = await ethers.provider.getFeeData();
+  const gasPrice = feeData.gasPrice ?? 1_000_000_000n;
+  const chainId = (await ethers.provider.getNetwork()).chainId;
+
+  const txForSign = {
+    ...deployTx,
+    gasLimit,
+    nonce,
+    chainId,
+    type: 0,
+    gasPrice,
+  };
+
+  const signed = await deployer.signTransaction(txForSign);
+  const txHash = await ethers.provider.send("eth_sendRawTransaction", [signed]);
+
+  let receipt = null;
+  while (!receipt) {
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    receipt = await ethers.provider.getTransactionReceipt(txHash);
+  }
+
+  return ethers.getContractAt(contractName, receipt.contractAddress, deployer);
+}
+
 async function deployCore() {
-  const [owner, alice, bob, feeTo] = await ethers.getSigners();
+  const { owner, alice, bob, feeTo } = await getActors();
+  const ownerAddress = await signerAddress(owner);
+  const aliceAddress = await signerAddress(alice);
 
-  const Factory = await ethers.getContractFactory("ReefswapV2Factory");
-  const Wrapped = await ethers.getContractFactory("WrappedREEF");
-  const Router = await ethers.getContractFactory("ReefswapV2Router02");
+  const factory = await deployContract("ReefswapV2Factory", [ownerAddress], owner);
+  const wrapped = await deployContract("WrappedREEF", [], owner);
+  const router = await deployContract(
+    "ReefswapV2Router02",
+    [await factory.getAddress(), await wrapped.getAddress()],
+    owner
+  );
 
-  const factory = await Factory.deploy(owner.address);
-  const wrapped = await Wrapped.deploy();
-  const router = await Router.deploy(await factory.getAddress(), await wrapped.getAddress());
+  const tokenA = await deployContract("Token", [INITIAL_SUPPLY], owner);
+  const tokenB = await deployContract("LotrToken", [INITIAL_SUPPLY], owner);
+  const tokenC = await deployContract("SwToken", [INITIAL_SUPPLY], owner);
 
-  const Token = await ethers.getContractFactory("Token");
-  const LotrToken = await ethers.getContractFactory("LotrToken");
-  const SwToken = await ethers.getContractFactory("SwToken");
-
-  const tokenA = await Token.deploy(INITIAL_SUPPLY);
-  const tokenB = await LotrToken.deploy(INITIAL_SUPPLY);
-  const tokenC = await SwToken.deploy(INITIAL_SUPPLY);
-
-  await tokenA.transfer(alice.address, ethers.parseEther("50000"));
-  await tokenB.transfer(alice.address, ethers.parseEther("50000"));
-  await tokenC.transfer(alice.address, ethers.parseEther("50000"));
+  await tokenA.connect(owner).transfer(aliceAddress, ethers.parseEther("50000"));
+  await tokenB.connect(owner).transfer(aliceAddress, ethers.parseEther("50000"));
+  await tokenC.connect(owner).transfer(aliceAddress, ethers.parseEther("50000"));
 
   const approvals = [
-    tokenA.approve(await router.getAddress(), ethers.MaxUint256),
-    tokenB.approve(await router.getAddress(), ethers.MaxUint256),
-    tokenC.approve(await router.getAddress(), ethers.MaxUint256),
+    tokenA.connect(owner).approve(await router.getAddress(), ethers.MaxUint256),
+    tokenB.connect(owner).approve(await router.getAddress(), ethers.MaxUint256),
+    tokenC.connect(owner).approve(await router.getAddress(), ethers.MaxUint256),
     tokenA.connect(alice).approve(await router.getAddress(), ethers.MaxUint256),
     tokenB.connect(alice).approve(await router.getAddress(), ethers.MaxUint256),
     tokenC.connect(alice).approve(await router.getAddress(), ethers.MaxUint256),
@@ -97,7 +211,8 @@ async function reservesFor(pair, tokenAAddress) {
 }
 
 async function signPermit(signer, pair, spender, value, permitDeadline) {
-  const nonce = await pair.nonces(signer.address);
+  const ownerAddress = await signerAddress(signer);
+  const nonce = await pair.nonces(ownerAddress);
   const chainId = (await ethers.provider.getNetwork()).chainId;
 
   const domain = {
@@ -118,7 +233,7 @@ async function signPermit(signer, pair, spender, value, permitDeadline) {
   };
 
   const message = {
-    owner: signer.address,
+    owner: ownerAddress,
     spender,
     value,
     nonce,
@@ -130,6 +245,7 @@ async function signPermit(signer, pair, spender, value, permitDeadline) {
 }
 
 describe("Reefswap contracts", function () {
+  this.timeout(isLocalRpcNetwork() ? 300000 : 40000);
   describe("ReefswapV2Factory", function () {
     it("creates pair deterministically and populates bidirectional mappings", async function () {
       const { owner, factory, tokenA, tokenB } = await deployCore();
@@ -206,13 +322,34 @@ describe("Reefswap contracts", function () {
       await factory.connect(bob).setFeeTo(owner.address);
       expect(await factory.feeTo()).to.equal(owner.address);
     });
+
+    it("creates multiple unique pairs and tracks allPairs ordering", async function () {
+      const { factory, tokenA, tokenB, tokenC } = await deployCore();
+
+      await factory.createPair(await tokenA.getAddress(), await tokenB.getAddress());
+      await factory.createPair(await tokenB.getAddress(), await tokenC.getAddress());
+      await factory.createPair(await tokenA.getAddress(), await tokenC.getAddress());
+
+      expect(await factory.allPairsLength()).to.equal(3);
+
+      const pairAB = await factory.getPair(await tokenA.getAddress(), await tokenB.getAddress());
+      const pairBC = await factory.getPair(await tokenB.getAddress(), await tokenC.getAddress());
+      const pairAC = await factory.getPair(await tokenA.getAddress(), await tokenC.getAddress());
+
+      expect(pairAB).to.not.equal(pairBC);
+      expect(pairAB).to.not.equal(pairAC);
+      expect(pairBC).to.not.equal(pairAC);
+
+      expect(await factory.allPairs(0)).to.equal(pairAB);
+      expect(await factory.allPairs(1)).to.equal(pairBC);
+      expect(await factory.allPairs(2)).to.equal(pairAC);
+    });
   });
 
   describe("WrappedREEF", function () {
     it("supports deposit by function and receive fallback", async function () {
-      const [owner] = await ethers.getSigners();
-      const Wrapped = await ethers.getContractFactory("WrappedREEF");
-      const wrapped = await Wrapped.deploy();
+      const { owner } = await getActors();
+      const wrapped = await deployContract("WrappedREEF", [], owner);
       const wrappedAddress = await wrapped.getAddress();
 
       await wrapped.deposit({ value: ethers.parseEther("1.5") });
@@ -223,9 +360,8 @@ describe("Reefswap contracts", function () {
     });
 
     it("withdraws correctly and enforces balances", async function () {
-      const [owner] = await ethers.getSigners();
-      const Wrapped = await ethers.getContractFactory("WrappedREEF");
-      const wrapped = await Wrapped.deploy();
+      const { owner } = await getActors();
+      const wrapped = await deployContract("WrappedREEF", [], owner);
 
       await wrapped.deposit({ value: ethers.parseEther("2") });
       await wrapped.withdraw(ethers.parseEther("0.75"));
@@ -237,9 +373,8 @@ describe("Reefswap contracts", function () {
     });
 
     it("handles allowance and infinite allowance transferFrom semantics", async function () {
-      const [owner, alice, bob] = await ethers.getSigners();
-      const Wrapped = await ethers.getContractFactory("WrappedREEF");
-      const wrapped = await Wrapped.deploy();
+      const { owner, alice, bob } = await getActors();
+      const wrapped = await deployContract("WrappedREEF", [], owner);
 
       await wrapped.deposit({ value: ethers.parseEther("3") });
       await wrapped.approve(alice.address, ethers.parseEther("2"));
@@ -261,14 +396,10 @@ describe("Reefswap contracts", function () {
 
   describe("ReefswapV2Pair (core behavior)", function () {
     async function setupPairWithFactory() {
-      const [owner, alice, feeRecipient] = await ethers.getSigners();
-      const Factory = await ethers.getContractFactory("ReefswapV2Factory");
-      const factory = await Factory.deploy(owner.address);
-
-      const Token = await ethers.getContractFactory("Token");
-      const LotrToken = await ethers.getContractFactory("LotrToken");
-      const tokenA = await Token.deploy(INITIAL_SUPPLY);
-      const tokenB = await LotrToken.deploy(INITIAL_SUPPLY);
+      const { owner, alice, feeTo: feeRecipient } = await getActors();
+      const factory = await deployContract("ReefswapV2Factory", [owner.address], owner);
+      const tokenA = await deployContract("Token", [INITIAL_SUPPLY], owner);
+      const tokenB = await deployContract("LotrToken", [INITIAL_SUPPLY], owner);
 
       await factory.createPair(await tokenA.getAddress(), await tokenB.getAddress());
       const pair = await getPair(factory, tokenA, tokenB);
@@ -404,6 +535,36 @@ describe("Reefswap contracts", function () {
       await ctx.pair.mint(ctx.owner.address);
 
       expect(await ctx.pair.balanceOf(ctx.feeRecipient.address)).to.be.gt(0);
+    });
+
+    it("reverts mint when initial liquidity is not enough after minimum lock", async function () {
+      const ctx = await setupPairWithFactory();
+
+      await ctx.tokenA.transfer(await ctx.pair.getAddress(), 1000n);
+      await ctx.tokenB.transfer(await ctx.pair.getAddress(), 1000n);
+
+      await expect(ctx.pair.mint(ctx.owner.address)).to.be.revertedWith(
+        "ReefswapV2: INSUFFICIENT_LIQUIDITY_MINTED"
+      );
+    });
+
+    it("reverts swap when recipient is one of the pair token addresses", async function () {
+      const ctx = await setupPairWithFactory();
+      const amountA = ethers.parseEther("10");
+      const amountB = ethers.parseEther("10");
+      await mintInitialLiquidity(ctx, amountA, amountB);
+
+      const inputAmount = ethers.parseEther("1");
+      await ctx.tokenA.transfer(await ctx.pair.getAddress(), inputAmount);
+      const outputAmount = getAmountOut(inputAmount, amountA, amountB);
+      const token0 = await ctx.pair.token0();
+      const tokenAAddress = await ctx.tokenA.getAddress();
+      const amount0Out = token0.toLowerCase() === tokenAAddress.toLowerCase() ? 0n : outputAmount;
+      const amount1Out = token0.toLowerCase() === tokenAAddress.toLowerCase() ? outputAmount : 0n;
+
+      await expect(
+        ctx.pair.swap(amount0Out, amount1Out, await ctx.tokenA.getAddress(), "0x")
+      ).to.be.revertedWith("ReefswapV2: INVALID_TO");
     });
   });
 
@@ -636,6 +797,149 @@ describe("Reefswap contracts", function () {
       ).to.be.revertedWith("ReefswapV2Router: INVALID_PATH");
     });
 
+    it("reverts addLiquidity when slippage bounds are not satisfied", async function () {
+      const { owner, router, tokenA, tokenB } = await deployCore();
+
+      await router.addLiquidity(
+        await tokenA.getAddress(),
+        await tokenB.getAddress(),
+        ethers.parseEther("100"),
+        ethers.parseEther("200"),
+        0,
+        0,
+        owner.address,
+        await deadlineAfter()
+      );
+
+      await expect(
+        router.addLiquidity(
+          await tokenA.getAddress(),
+          await tokenB.getAddress(),
+          ethers.parseEther("10"),
+          ethers.parseEther("25"),
+          0,
+          ethers.parseEther("21"),
+          owner.address,
+          await deadlineAfter()
+        )
+      ).to.be.revertedWith("ReefswapV2Router: INSUFFICIENT_B_AMOUNT");
+    });
+
+    it("swaps tokens for exact ETH and delivers the exact requested output", async function () {
+      const { alice, bob, router, tokenA, wrapped } = await deployCore();
+
+      await router.addLiquidityETH(
+        await tokenA.getAddress(),
+        ethers.parseEther("500"),
+        0,
+        0,
+        alice.address,
+        await deadlineAfter(),
+        { value: ethers.parseEther("50") }
+      );
+
+      const exactEthOut = ethers.parseEther("1");
+      const path = [await tokenA.getAddress(), await wrapped.getAddress()];
+      const amountsIn = await router.getAmountsIn(exactEthOut, path);
+      const bobEthBefore = await ethers.provider.getBalance(bob.address);
+
+      await router
+        .connect(alice)
+        .swapTokensForExactETH(exactEthOut, amountsIn[0], path, bob.address, await deadlineAfter());
+
+      const bobEthAfter = await ethers.provider.getBalance(bob.address);
+      expect(bobEthAfter - bobEthBefore).to.equal(exactEthOut);
+    });
+
+    it("swapETHForExactTokens refunds unused ETH to sender", async function () {
+      const { alice, router, tokenA, wrapped } = await deployCore();
+
+      await router.addLiquidityETH(
+        await tokenA.getAddress(),
+        ethers.parseEther("800"),
+        0,
+        0,
+        alice.address,
+        await deadlineAfter(),
+        { value: ethers.parseEther("80") }
+      );
+
+      const exactTokenOut = ethers.parseEther("5");
+      const path = [await wrapped.getAddress(), await tokenA.getAddress()];
+      const amountsIn = await router.getAmountsIn(exactTokenOut, path);
+      const offeredEth = amountsIn[0] + ethers.parseEther("1");
+      const aliceEthBefore = await ethers.provider.getBalance(alice.address);
+      const aliceTokenBefore = await tokenA.balanceOf(alice.address);
+
+      const tx = await router
+        .connect(alice)
+        .swapETHForExactTokens(exactTokenOut, path, alice.address, await deadlineAfter(), {
+          value: offeredEth,
+        });
+      const receipt = await tx.wait();
+      const gasPrice = receipt.gasPrice ?? tx.gasPrice;
+      const gasCost = receipt.gasUsed * gasPrice;
+      const aliceEthAfter = await ethers.provider.getBalance(alice.address);
+      const aliceTokenAfter = await tokenA.balanceOf(alice.address);
+
+      expect(aliceTokenAfter - aliceTokenBefore).to.equal(exactTokenOut);
+      expect(aliceEthBefore - aliceEthAfter - gasCost).to.equal(amountsIn[0]);
+      expect(offeredEth).to.be.gt(amountsIn[0]);
+    });
+
+    it("removes ETH liquidity with permit signature", async function () {
+      const { owner, bob, factory, router, tokenA, wrapped } = await deployCore();
+
+      await router.addLiquidityETH(
+        await tokenA.getAddress(),
+        ethers.parseEther("200"),
+        0,
+        0,
+        owner.address,
+        await deadlineAfter(),
+        { value: ethers.parseEther("20") }
+      );
+
+      const pair = await getPair(factory, tokenA, wrapped);
+      const liquidity = await pair.balanceOf(owner.address);
+      const permitDeadline = await deadlineAfter();
+      const sig = await signPermit(owner, pair, await router.getAddress(), ethers.MaxUint256, permitDeadline);
+
+      const bobTokenBefore = await tokenA.balanceOf(bob.address);
+      const bobEthBefore = await ethers.provider.getBalance(bob.address);
+
+      await router.removeLiquidityETHWithPermit(
+        await tokenA.getAddress(),
+        liquidity / 2n,
+        0,
+        0,
+        bob.address,
+        permitDeadline,
+        true,
+        sig.v,
+        sig.r,
+        sig.s
+      );
+
+      const bobTokenAfter = await tokenA.balanceOf(bob.address);
+      const bobEthAfter = await ethers.provider.getBalance(bob.address);
+      expect(bobTokenAfter).to.be.gt(bobTokenBefore);
+      expect(bobEthAfter).to.be.gt(bobEthBefore);
+      expect(await pair.nonces(owner.address)).to.equal(1);
+    });
+
+    it("reverts amount helper queries on invalid path length", async function () {
+      const { router, tokenA } = await deployCore();
+      const singlePath = [await tokenA.getAddress()];
+
+      await expect(router.getAmountsOut(1000n, singlePath)).to.be.revertedWith(
+        "ReefswapV2Library: INVALID_PATH"
+      );
+      await expect(router.getAmountsIn(1000n, singlePath)).to.be.revertedWith(
+        "ReefswapV2Library: INVALID_PATH"
+      );
+    });
+
     it("removes liquidity with permit signature", async function () {
       const { owner, factory, router, tokenA, tokenB } = await deployCore();
 
@@ -734,6 +1038,48 @@ describe("Reefswap contracts", function () {
 
       const bobEthAfter = await ethers.provider.getBalance(bob.address);
       expect(bobEthAfter).to.be.gt(bobEthBefore);
+    });
+
+    it("supports fee-on-transfer tokens for exact ETH input path", async function () {
+      const { alice, router, wrapped } = await deployCore();
+
+      const FeeToken = await ethers.getContractFactory("FeeOnTransferToken");
+      const feeToken = await FeeToken.deploy(
+        "Taxed Token",
+        "TAX",
+        ethers.parseEther("1000000"),
+        100
+      );
+
+      await feeToken.transfer(alice.address, ethers.parseEther("50000"));
+      await feeToken.approve(await router.getAddress(), ethers.MaxUint256);
+      await feeToken.connect(alice).approve(await router.getAddress(), ethers.MaxUint256);
+
+      await router.addLiquidityETH(
+        await feeToken.getAddress(),
+        ethers.parseEther("10000"),
+        0,
+        0,
+        alice.address,
+        await deadlineAfter(),
+        { value: ethers.parseEther("150") }
+      );
+
+      const path = [await wrapped.getAddress(), await feeToken.getAddress()];
+      const aliceBefore = await feeToken.balanceOf(alice.address);
+
+      await router
+        .connect(alice)
+        .swapExactETHForTokensSupportingFeeOnTransferTokens(
+          0,
+          path,
+          alice.address,
+          await deadlineAfter(),
+          { value: ethers.parseEther("1") }
+        );
+
+      const aliceAfter = await feeToken.balanceOf(alice.address);
+      expect(aliceAfter).to.be.gt(aliceBefore);
     });
   });
 });

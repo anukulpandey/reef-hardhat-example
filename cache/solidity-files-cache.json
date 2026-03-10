@@ -697,8 +697,8 @@
       ]
     },
     "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefSwap/libraries/ReefswapV2Library.sol": {
-      "lastModificationDate": 1772534100203,
-      "contentHash": "18951c9a1b6ab48d8b8b894fffe8c2a9",
+      "lastModificationDate": 1772535237020,
+      "contentHash": "c792d77906a8160f3faa9adaa1df8e35",
       "sourceName": "contracts/ReefSwap/libraries/ReefswapV2Library.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -738,6 +738,7 @@
       },
       "imports": [
         "../interfaces/IReefswapV2Pair.sol",
+        "../ReefswapV2Pair.sol",
         "./SafeMath2.sol"
       ],
       "versionPragmas": [
@@ -1838,6 +1839,106 @@
       ],
       "artifacts": [
         "SafeERC20Namer"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefSwap/test/FeeOnTransferToken.sol": {
+      "lastModificationDate": 1772535248699,
+      "contentHash": "8314db891aa81f32fbc965e8d5cec0ee",
+      "sourceName": "contracts/ReefSwap/test/FeeOnTransferToken.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "FeeOnTransferToken"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/SimpleToken.sol": {
+      "lastModificationDate": 1773047713188,
+      "contentHash": "9e9807c1fa1cce1d2cbaf13c7c3e6db1",
+      "sourceName": "contracts/SimpleToken.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "SimpleToken"
       ]
     }
   }
