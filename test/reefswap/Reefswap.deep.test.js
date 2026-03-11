@@ -4,7 +4,7 @@ const { ethers } = hre;
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 
 const INITIAL_SUPPLY = ethers.parseEther("1000000");
-const LOCAL_RPC_NETWORKS = new Set(["localNode", "localhost8545"]);
+const LOCAL_RPC_NETWORKS = new Set(["localNode", "localhost8545", "localhost"]);
 
 let cachedActors;
 const deployerNonces = new Map();

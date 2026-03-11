@@ -56,7 +56,14 @@ module.exports = {
       polkadotUrl: process.env.LOCAL_POLKADOT_WS_URL || "ws://127.0.0.1:9944",
       accounts: [process.env.PRIVATE_KEY],
     },
+    localhost: {
+      polkadot: true,
+      polkadotUrl: process.env.LOCAL_POLKADOT_WS_URL || "ws://127.0.0.1:9944",
+      url: "http://localhost:8545",
+      accounts: [process.env.PRIVATE_KEY],
+    },
     localhost8545: {
+      polkadotUrl: process.env.LOCAL_POLKADOT_WS_URL || "ws://127.0.0.1:9944",
       url: "http://127.0.0.1:8545",
       accounts: [process.env.PRIVATE_KEY],
     },
