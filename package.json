@@ -8,6 +8,7 @@
     "deploy:verify": "npx hardhat run scripts/deploy_and_verify.js --network reef",
     "deploy:reefswap": "npx hardhat run scripts/deploy_reefswap.js --network localNode",
     "deploy:token": "npx hardhat run scripts/deploy_token.js --network localNode",
+    "deploy:reef-erc20": "npx hardhat run scripts/deploy_reef_erc20.js --network localNode",
     "seed:reefswap": "npx hardhat run scripts/bootstrap_reefswap_activity.js --network localNode",
     "seed:reefswap:full": "npx hardhat run scripts/bootstrap_reefswap_full.js --network localNode",
     "test:reefswap:deep": "npx hardhat test test/reefswap/Reefswap.deep.test.js --network hardhat",

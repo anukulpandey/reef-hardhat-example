@@ -1,0 +1,24 @@
+{
+  "_format": "hh-resolc-artifact-1",
+  "contractName": "IMultiCurrency",
+  "sourceName": "contracts/ReefERC20/token/IMultiCurrency.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "currencyId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

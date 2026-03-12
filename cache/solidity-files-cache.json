@@ -1195,8 +1195,8 @@
       ]
     },
     "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefSwap/ReefswapV2Factory.sol": {
-      "lastModificationDate": 1772534085919,
-      "contentHash": "5a41bf9e5a11c1030094de79aece525c",
+      "lastModificationDate": 1773310943173,
+      "contentHash": "ac86df5f6b29dca97158031fb61be311",
       "sourceName": "contracts/ReefSwap/ReefswapV2Factory.sol",
       "solcConfig": {
         "version": "0.8.28",
@@ -1939,6 +1939,154 @@
       ],
       "artifacts": [
         "SimpleToken"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefERC20/ReefERC20.sol": {
+      "lastModificationDate": 1773335584312,
+      "contentHash": "9bdb12c00b29fb3170926b5252524644",
+      "sourceName": "contracts/ReefERC20/ReefERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "./token/IMultiCurrency.sol",
+        "./token/MultiCurrency.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "REEFERC20"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefERC20/token/IMultiCurrency.sol": {
+      "lastModificationDate": 1773335588211,
+      "contentHash": "44f587605e4b964fcf15d1fcfca6f239",
+      "sourceName": "contracts/ReefERC20/token/IMultiCurrency.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "IMultiCurrency"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/ReefERC20/token/MultiCurrency.sol": {
+      "lastModificationDate": 1773335598923,
+      "contentHash": "55784e2cdb810bcd41ae933c7ddac9b3",
+      "sourceName": "contracts/ReefERC20/token/MultiCurrency.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": true,
+            "runs": 400
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "metadata",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "resolc": {
+            "version": "0.5.0",
+            "compilerSource": "npm",
+            "settings": {
+              "optimizer": {
+                "enabled": true,
+                "runs": 400
+              }
+            },
+            "standardJson": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "MultiCurrency"
       ]
     }
   }

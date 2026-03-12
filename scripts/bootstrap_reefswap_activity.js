@@ -1,8 +1,8 @@
 const { ethers } = require("hardhat");
 
 const DEFAULTS = {
-  factory: "0xD85d7B3BE238070F49bB0e3729aa799207267394",
-  wrapped: "0x2949F87AB2e69ea07a91cef42e6987BEB2E5F45a",
+  factory: "0xDAb89107eaF290312fd8e80463A6a9Ec3D428F4A",
+  wrapped: "0x3C2BA92EAFAbA6A5aC21502D8C55d3A33950f7A6",
 };
 
 const FACTORY_ABI = [
