@@ -1,16 +1,20 @@
+const { resolveLocalStackValue } = require("../../scripts/lib/local_stack_state");
 const { expect } = require("chai");
 const hre = require("hardhat");
 const { ethers } = hre;
 
 const DEPLOYMENT = {
-  wrapped: "0x3C2BA92EAFAbA6A5aC21502D8C55d3A33950f7A6",
-  factory: "0xDAb89107eaF290312fd8e80463A6a9Ec3D428F4A",
-  router: "0xa3Cab0B7288fA4CAe22CcD8B1a80c4bFaDe27664",
-  chainId: 13939n,
-  walletRpc: "http://localhost:8545",
+  wrapped: resolveLocalStackValue("REEFSWAP_WREEF", "0x3C2BA92EAFAbA6A5aC21502D8C55d3A33950f7A6"),
+  factory: resolveLocalStackValue("REEFSWAP_FACTORY", "0xDAb89107eaF290312fd8e80463A6a9Ec3D428F4A"),
+  router: resolveLocalStackValue("REEFSWAP_ROUTER", "0xa3Cab0B7288fA4CAe22CcD8B1a80c4bFaDe27664"),
+  chainId: BigInt(resolveLocalStackValue("REEF_CHAIN_ID", "13939")),
+  walletRpc: resolveLocalStackValue("REEF_RPC_URL", "http://localhost:8545"),
   appTransportRpc: "/api/reef-rpc",
-  subgraph: "http://localhost:8000/subgraphs/name/uniswap-v2-localhost",
-  explorer: "https://reefscan.com",
+  subgraph: resolveLocalStackValue(
+    "SUBGRAPH_GRAPHQL_ENDPOINT",
+    "http://localhost:8000/subgraphs/name/uniswap-v2-localhost",
+  ),
+  explorer: resolveLocalStackValue("EXPLORER_BASE_URL", "https://reefscan.com"),
 };
 
 const ROUTER_ABI = [

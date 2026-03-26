@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 const { ethers } = require("hardhat");
 const { ethers: ethersLib } = require("ethers");
+const { ensureFactoryDependencies } = require("./lib/ensure_factory_dependencies");
 
 // Hardhat's LocalAccountsProvider uses micro-eth-signer which enforces EIP-3860's
 // 49,152-byte initcode limit. PolkaVM (resolc) bytecode is much larger (~157KB for
@@ -57,6 +58,16 @@ async function main() {
   console.log(`WrappedREEF deployed to: ${wrappedNativeAddress}`);
 
   // 2. Deploy ReefswapV2Factory (small — normal hardhat path)
+  console.log("\nPreparing Reefswap factory dependencies...");
+  await ensureFactoryDependencies({
+    artifactsPath: hre.config.paths.artifacts,
+    ethRpcUrl: hre.network.config.url,
+    polkadotRpcUrl: hre.network.config.polkadotUrl,
+    privateKey: hre.network.config.accounts[0],
+    sourcePath: 'contracts/ReefSwap/ReefswapV2Factory.sol',
+    contractName: 'ReefswapV2Factory',
+  });
+
   console.log("\nDeploying ReefswapV2Factory...");
   const Factory = await ethers.getContractFactory("ReefswapV2Factory");
   const factory = await Factory.deploy(deployer.address);

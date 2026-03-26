@@ -1,6 +1,8 @@
+const fs = require("fs");
 const hre = require("hardhat");
 const { ethers } = require("hardhat");
 const { ethers: ethersLib } = require("ethers");
+const { ensureFactoryDependencies } = require("./lib/ensure_factory_dependencies");
 
 function getAmountOut(amountIn, reserveIn, reserveOut) {
   const amountInWithFee = amountIn * 997n;
@@ -9,56 +11,91 @@ function getAmountOut(amountIn, reserveIn, reserveOut) {
   return numerator / denominator;
 }
 
-// For large PolkaVM initcode (Router), bypass LocalAccountsProvider signer middleware.
-async function deployLarge(contractName, constructorArgs) {
-  const provider = hre.ethers.provider;
-  const privateKey = hre.network.config.accounts[0];
-
-  const factory = await ethers.getContractFactory(contractName);
-  const deployTx = await factory.getDeployTransaction(...constructorArgs);
-
-  const wallet = new ethersLib.Wallet(privateKey, provider);
-
-  let gasLimit;
-  try {
-    gasLimit = await provider.estimateGas({ ...deployTx, from: wallet.address });
-  } catch {
-    gasLimit = 12_000_000n;
-  }
-
-  const populated = await wallet.populateTransaction({ ...deployTx, gasLimit });
-  const signed = await wallet.signTransaction(populated);
-  const txHash = await provider.send("eth_sendRawTransaction", [signed]);
-
+async function waitForReceipt(provider, txHash) {
   let receipt = null;
   while (!receipt) {
     await new Promise((r) => setTimeout(r, 1200));
     receipt = await provider.getTransactionReceipt(txHash);
   }
+  return receipt;
+}
+
+async function sendRawTransaction(txRequest, { gasFallback = 12_000_000n } = {}) {
+  const provider = hre.ethers.provider;
+  const privateKey = hre.network.config.accounts[0];
+  const wallet = new ethersLib.Wallet(privateKey, provider);
+
+  let gasLimit;
+  try {
+    gasLimit = await provider.estimateGas({ ...txRequest, from: wallet.address });
+  } catch {
+    gasLimit = gasFallback;
+  }
+
+  const populated = await wallet.populateTransaction({ ...txRequest, gasLimit });
+  const signed = await wallet.signTransaction(populated);
+  const txHash = await provider.send("eth_sendRawTransaction", [signed]);
+  const receipt = await waitForReceipt(provider, txHash);
+
+  return { txHash, receipt };
+}
+
+async function deployLarge(contractName, constructorArgs, txOverrides = {}) {
+  const factory = await ethers.getContractFactory(contractName);
+  const deployTx = await factory.getDeployTransaction(...constructorArgs);
+  const { txHash, receipt } = await sendRawTransaction({ ...deployTx, ...txOverrides });
 
   return { address: receipt.contractAddress, txHash };
 }
 
+async function deployContract(contractName, constructorArgs, txOverrides = {}) {
+  return deployLarge(contractName, constructorArgs, txOverrides);
+}
+
+async function sendContractCall(contract, methodName, args = [], txOverrides = {}) {
+  const txRequest = await contract[methodName].populateTransaction(...args);
+  return sendRawTransaction({ ...txRequest, ...txOverrides });
+}
+
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  const provider = ethers.provider;
+  const privateKey = hre.network.config.accounts[0];
+  const deployer = new ethersLib.Wallet(privateKey, provider);
+  const nextTxOverrides = async (overrides = {}) => ({
+    ...overrides,
+    nonce: await provider.getTransactionCount(deployer.address, "latest"),
+  });
   console.log(`Deployer: ${deployer.address}`);
 
-  const Wrapped = await ethers.getContractFactory("WrappedREEF");
-  const Factory = await ethers.getContractFactory("ReefswapV2Factory");
-
-  const wrapped = await Wrapped.deploy();
-  await wrapped.waitForDeployment();
-  const wrappedAddress = await wrapped.getAddress();
+  await ensureFactoryDependencies({
+    artifactsPath: hre.config.paths.artifacts,
+    ethRpcUrl: hre.network.config.url,
+    polkadotRpcUrl: hre.network.config.polkadotUrl,
+    privateKey: hre.network.config.accounts[0],
+    sourcePath: 'contracts/ReefSwap/ReefswapV2Factory.sol',
+    contractName: 'ReefswapV2Factory',
+  });
+  const wrappedDeployment = await deployContract("WrappedREEF", [], await nextTxOverrides());
+  const wrappedAddress = wrappedDeployment.address;
+  const wrapped = await ethers.getContractAt("WrappedREEF", wrappedAddress, provider);
   console.log(`WrappedREEF: ${wrappedAddress}`);
 
-  const factory = await Factory.deploy(deployer.address);
-  await factory.waitForDeployment();
-  const factoryAddress = await factory.getAddress();
+  const factoryDeployment = await deployContract(
+    "ReefswapV2Factory",
+    [deployer.address],
+    await nextTxOverrides(),
+  );
+  const factoryAddress = factoryDeployment.address;
+  const factory = await ethers.getContractAt("ReefswapV2Factory", factoryAddress, provider);
   console.log(`Factory: ${factoryAddress}`);
 
   let routerAddress = ethers.ZeroAddress;
   try {
-    const deployedRouter = await deployLarge("ReefswapV2Router02", [factoryAddress, wrappedAddress]);
+    const deployedRouter = await deployLarge(
+      "ReefswapV2Router02",
+      [factoryAddress, wrappedAddress],
+      await nextTxOverrides(),
+    );
     routerAddress = deployedRouter.address;
     console.log(`Router02: ${routerAddress}`);
     console.log(`Router deploy tx: ${deployedRouter.txHash}`);
@@ -67,38 +104,61 @@ async function main() {
     console.log(String(error.message || error));
   }
 
-  const Token = await ethers.getContractFactory("SimpleToken");
-  const token = await Token.deploy("Graph Seed Token", "GST", ethers.parseEther("1000000"));
-  await token.waitForDeployment();
-  const tokenAddress = await token.getAddress();
+  const tokenDeployment = await deployContract(
+    "SimpleToken",
+    ["Graph Seed Token", "GST", ethers.parseEther("1000000")],
+    await nextTxOverrides(),
+  );
+  const tokenAddress = tokenDeployment.address;
+  const token = await ethers.getContractAt("SimpleToken", tokenAddress, provider);
   console.log(`Token: ${tokenAddress}`);
 
-  const createPairTx = await factory.createPair(tokenAddress, wrappedAddress);
-  await createPairTx.wait();
+  const createPairTx = await sendContractCall(
+    factory,
+    "createPair",
+    [tokenAddress, wrappedAddress],
+    await nextTxOverrides(),
+  );
   const pairAddress = await factory.getPair(tokenAddress, wrappedAddress);
   console.log(`Pair: ${pairAddress}`);
-  console.log(`createPair tx: ${createPairTx.hash}`);
+  console.log(`createPair tx: ${createPairTx.txHash}`);
 
-  const pair = await ethers.getContractAt("ReefswapV2Pair", pairAddress);
+  const pair = await ethers.getContractAt("ReefswapV2Pair", pairAddress, provider);
 
-  const depositTx = await wrapped.deposit({ value: ethers.parseEther("120") });
-  await depositTx.wait();
-  console.log(`wrapped.deposit tx: ${depositTx.hash}`);
+  const depositTx = await sendContractCall(
+    wrapped,
+    "deposit",
+    [],
+    await nextTxOverrides({ value: ethers.parseEther("120") }),
+  );
+  console.log(`wrapped.deposit tx: ${depositTx.txHash}`);
 
   const seedToken = ethers.parseEther("20000");
   const seedWrapped = ethers.parseEther("100");
 
-  const transferTokenTx = await token.transfer(pairAddress, seedToken);
-  await transferTokenTx.wait();
-  console.log(`token->pair seed tx: ${transferTokenTx.hash}`);
+  const transferTokenTx = await sendContractCall(
+    token,
+    "transfer",
+    [pairAddress, seedToken],
+    await nextTxOverrides(),
+  );
+  console.log(`token->pair seed tx: ${transferTokenTx.txHash}`);
 
-  const transferWrappedTx = await wrapped.transfer(pairAddress, seedWrapped);
-  await transferWrappedTx.wait();
-  console.log(`wrapped->pair seed tx: ${transferWrappedTx.hash}`);
+  const transferWrappedTx = await sendContractCall(
+    wrapped,
+    "transfer",
+    [pairAddress, seedWrapped],
+    await nextTxOverrides(),
+  );
+  console.log(`wrapped->pair seed tx: ${transferWrappedTx.txHash}`);
 
-  const mintTx = await pair.mint(deployer.address);
-  await mintTx.wait();
-  console.log(`mint tx: ${mintTx.hash}`);
+  const mintTx = await sendContractCall(
+    pair,
+    "mint",
+    [deployer.address],
+    await nextTxOverrides(),
+  );
+  console.log(`mint tx: ${mintTx.txHash}`);
 
   // Swap 1: token -> wrapped
   const tokenIn = ethers.parseEther("10");
@@ -109,12 +169,20 @@ async function main() {
   const reserveOutA = tokenIs0 ? reserve1A : reserve0A;
   const wrappedOut = getAmountOut(tokenIn, reserveInA, reserveOutA);
 
-  const tokenInTx = await token.transfer(pairAddress, tokenIn);
-  await tokenInTx.wait();
+  const tokenInTx = await sendContractCall(
+    token,
+    "transfer",
+    [pairAddress, tokenIn],
+    await nextTxOverrides(),
+  );
 
-  const swap1 = await pair.swap(tokenIs0 ? 0n : wrappedOut, tokenIs0 ? wrappedOut : 0n, deployer.address, "0x");
-  await swap1.wait();
-  console.log(`swap token->wrapped tx: ${swap1.hash}`);
+  const swap1 = await sendContractCall(
+    pair,
+    "swap",
+    [tokenIs0 ? 0n : wrappedOut, tokenIs0 ? wrappedOut : 0n, deployer.address, "0x"],
+    await nextTxOverrides(),
+  );
+  console.log(`swap token->wrapped tx: ${swap1.txHash}`);
 
   // Swap 2: wrapped -> token
   const wrappedIn = ethers.parseEther("1");
@@ -125,14 +193,22 @@ async function main() {
   const reserveOutB = wrappedIs0 ? reserve1B : reserve0B;
   const tokenOut = getAmountOut(wrappedIn, reserveInB, reserveOutB);
 
-  const wrappedInTx = await wrapped.transfer(pairAddress, wrappedIn);
-  await wrappedInTx.wait();
+  const wrappedInTx = await sendContractCall(
+    wrapped,
+    "transfer",
+    [pairAddress, wrappedIn],
+    await nextTxOverrides(),
+  );
 
-  const swap2 = await pair.swap(wrappedIs0 ? 0n : tokenOut, wrappedIs0 ? tokenOut : 0n, deployer.address, "0x");
-  await swap2.wait();
-  console.log(`swap wrapped->token tx: ${swap2.hash}`);
+  const swap2 = await sendContractCall(
+    pair,
+    "swap",
+    [wrappedIs0 ? 0n : tokenOut, wrappedIs0 ? tokenOut : 0n, deployer.address, "0x"],
+    await nextTxOverrides(),
+  );
+  console.log(`swap wrapped->token tx: ${swap2.txHash}`);
 
-  const pairCreatedBlock = (await ethers.provider.getTransactionReceipt(createPairTx.hash)).blockNumber;
+  const pairCreatedBlock = createPairTx.receipt.blockNumber;
 
   console.log("\n--- Summary ---");
   console.log(`Factory:     ${factoryAddress}`);
@@ -142,6 +218,33 @@ async function main() {
   console.log(`Pair:        ${pairAddress}`);
   console.log(`startBlock:  ${pairCreatedBlock}`);
   console.log("\nUse this factory + startBlock in your subgraph and reindex.");
+
+  if (process.env.DEPLOYMENT_JSON_OUT) {
+    const deploymentSummary = {
+      deployer: deployer.address,
+      wrapped: wrappedAddress,
+      factory: factoryAddress,
+      router: routerAddress,
+      token: tokenAddress,
+      pair: pairAddress,
+      startBlock: String(pairCreatedBlock),
+      transactions: {
+        createPair: createPairTx.txHash,
+        wrapDeposit: depositTx.txHash,
+        tokenSeed: transferTokenTx.txHash,
+        wrappedSeed: transferWrappedTx.txHash,
+        mint: mintTx.txHash,
+        swapTokenToWrapped: swap1.txHash,
+        swapWrappedToToken: swap2.txHash,
+      },
+    };
+    fs.writeFileSync(
+      process.env.DEPLOYMENT_JSON_OUT,
+      `${JSON.stringify(deploymentSummary, null, 2)}\n`,
+      "utf8",
+    );
+    console.log(`Deployment JSON written to: ${process.env.DEPLOYMENT_JSON_OUT}`);
+  }
 }
 
 main()
