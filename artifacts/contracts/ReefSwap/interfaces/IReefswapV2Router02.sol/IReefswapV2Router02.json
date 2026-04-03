@@ -1,5 +1,5 @@
 {
-  "_format": "hh-resolc-artifact-1",
+  "_format": "hh-sol-artifact-1",
   "contractName": "IReefswapV2Router02",
   "sourceName": "contracts/ReefSwap/interfaces/IReefswapV2Router02.sol",
   "abi": [

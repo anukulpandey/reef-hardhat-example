@@ -10,34 +10,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -58,34 +46,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -109,34 +85,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -157,34 +121,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -205,34 +157,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -261,34 +201,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -311,34 +239,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -359,34 +275,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -407,34 +311,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -455,34 +347,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -503,34 +383,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -551,34 +419,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -607,34 +463,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -655,34 +499,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -705,34 +537,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -757,34 +577,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -805,34 +613,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -853,34 +649,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -901,34 +685,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -956,34 +728,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1004,34 +764,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1052,34 +800,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1103,34 +839,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1155,34 +879,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1203,34 +915,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1254,34 +954,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1311,34 +999,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1364,34 +1040,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1412,34 +1076,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1462,34 +1114,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1510,34 +1150,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1560,34 +1188,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1608,34 +1224,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1656,34 +1260,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1704,34 +1296,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1752,34 +1332,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1800,34 +1368,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1850,34 +1406,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1900,34 +1444,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -1950,34 +1482,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -2002,34 +1522,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -2050,34 +1558,22 @@
         "settings": {
           "evmVersion": "paris",
           "optimizer": {
-            "enabled": true,
-            "runs": 400
+            "enabled": false,
+            "runs": 200
           },
           "outputSelection": {
             "*": {
               "*": [
                 "abi",
-                "metadata",
                 "evm.bytecode",
                 "evm.deployedBytecode",
                 "evm.methodIdentifiers",
-                "storageLayout"
+                "metadata"
               ],
               "": [
                 "ast"
               ]
             }
-          },
-          "resolc": {
-            "version": "0.5.0",
-            "compilerSource": "npm",
-            "settings": {
-              "optimizer": {
-                "enabled": true,
-                "runs": 400
-              }
-            },
-            "standardJson": true
           }
         }
       },
@@ -2087,6 +1583,43 @@
       ],
       "artifacts": [
         "MultiCurrency"
+      ]
+    },
+    "/Users/anukul/Desktop/reef-hardhat-example/contracts/Create2/Create2Factory.sol": {
+      "lastModificationDate": 1775199062987,
+      "contentHash": "f2d32157590a044f9232a76b8ca7e279",
+      "sourceName": "contracts/Create2/Create2Factory.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.14"
+      ],
+      "artifacts": [
+        "Create2Factory",
+        "DeployWithCreate2"
       ]
     }
   }

@@ -1,5 +1,5 @@
 {
-  "_format": "hh-resolc-artifact-1",
+  "_format": "hh-sol-artifact-1",
   "contractName": "IReefswapV1Factory",
   "sourceName": "contracts/ReefSwap/interfaces/V1/IReefswapV1Factory.sol",
   "abi": [
